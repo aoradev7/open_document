@@ -16,6 +16,7 @@ dependencies:
   path_provider_windows: ^2.0.0
   share_plus: ^4.0.4
   intl: ^0.17.0
+  platform: ^3.1.0
 
 dev_dependencies:
   flutter_test:

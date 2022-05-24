@@ -16,6 +16,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -28,6 +29,7 @@ import java.io.File
 class OpenDocumentPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
   private var channel: MethodChannel? = null
+  private var messenger: BinaryMessenger? = null
   private lateinit var activity: Activity
   private lateinit var context: Context
 
@@ -37,7 +39,7 @@ class OpenDocumentPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.flutterPluginBinding = flutterPluginBinding
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "open_document")
+    channel = messenger?.let { it1 -> MethodChannel(it1, "open_document") }
     channel?.setMethodCallHandler(this)
   }
 
@@ -45,7 +47,7 @@ class OpenDocumentPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val plugin = OpenDocumentPlugin()
-      plugin.activity = registrar.activity()
+      registrar.activity()?.let { plugin.activity }
       plugin.context = registrar.context()
       val channel = MethodChannel(registrar.messenger(), "open_document")
       channel.setMethodCallHandler(plugin)
@@ -176,8 +178,7 @@ class OpenDocumentPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    channel = MethodChannel(
-            flutterPluginBinding?.binaryMessenger, "open_document")
+    channel = messenger?.let { it1 -> MethodChannel(it1, "open_document") }
     context = flutterPluginBinding?.applicationContext!!
     activity = binding.activity
     channel?.setMethodCallHandler(this)
