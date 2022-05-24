@@ -43,9 +43,11 @@ class MyFilesCore extends StatelessWidget {
   _scrollToEnd() async {
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
+  
+  T? _ambiguate<T>(T? value) => value;
 
   Widget buildHeader() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) => _scrollToEnd());
+    _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((_) => _scrollToEnd());
     return HeaderMyFolderFile(scrollController: scrollController, lastPaths: lastPaths);
   }
 }

@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:open_document/windows_fun.dart';
-import 'package:path_provider_windows/path_provider_windows.dart';
 
 class OpenDocument {
   static const MethodChannel _channel = const MethodChannel('open_document');
